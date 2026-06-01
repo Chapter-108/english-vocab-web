@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import type { Word, Settings, StudyMode } from '../types'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { Word, Settings, StudyMode, WordCard } from '../types'
 import { store } from '../services/storage'
 import { loadDict } from '../services/dictionaryLoader'
 import { getDict } from '../data/dictionaries'
@@ -16,12 +16,21 @@ export function useStudySession(dictId: string, settings: Settings) {
   const [loading, setLoading] = useState(true)
   const t = today()
 
+  // 卡片常驻内存：加载时读入一次，答题只改内存 + 防抖写盘（性能：不每词序列化整表）
+  const cardsRef = useRef<WordCard[]>([])
+  const writeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const flushCards = useCallback(() => {
+    if (writeTimer.current) clearTimeout(writeTimer.current)
+    writeTimer.current = setTimeout(() => store.saveCards(cardsRef.current), 300)
+  }, [])
+
   useEffect(() => {
     const meta = getDict(dictId)
     if (!meta) { setLoading(false); return }
     loadDict(meta.file).then(ws => {
       setWords(ws)
       const cards = store.loadCards()
+      cardsRef.current = cards
       const daily = store.loadDaily().find(d => d.date === t)
       const newDoneToday = daily?.newWords ?? 0
       const q = buildQueue({ cards, words: ws, dictId, today: t, dailyNewTarget: settings.dailyNewTarget, newDoneToday })
@@ -39,19 +48,24 @@ export function useStudySession(dictId: string, settings: Settings) {
 
   const submit = useCallback((correct: boolean) => {
     if (!current) return
-    const cards = store.loadCards()
-    const existing = cards.find(c => c.dictId === dictId && c.word === current.word.name)
-    const base = existing ?? newCard(dictId, current.word.name, t)
+    const cards = cardsRef.current
+    const idx = cards.findIndex(c => c.dictId === dictId && c.word === current.word.name)
+    const base = idx >= 0 ? cards[idx] : newCard(dictId, current.word.name, t)
     const updated = review(base, correct, t)
-    const others = cards.filter(c => !(c.dictId === dictId && c.word === current.word.name))
-    store.saveCards([...others, updated])
+    if (idx >= 0) cards[idx] = updated; else cards.push(updated)
+    flushCards()
 
     const remainingNew = queue.slice(index + 1).filter(i => i.isNew).length
-    const newTargetReached = (store.loadDaily().find(d => d.date === t)?.newWords ?? 0) + (current.isNew ? 1 : 0) >= settings.dailyNewTarget
-    store.recordStudy(t, { isNew: current.isNew, goalReached: newTargetReached && remainingNew === 0 })
+    const doneNew = (store.loadDaily().find(d => d.date === t)?.newWords ?? 0) + (current.isNew ? 1 : 0)
+    store.recordStudy(t, { isNew: current.isNew, goalReached: doneNew >= settings.dailyNewTarget && remainingNew === 0 })
 
     setIndex(i => i + 1)
-  }, [current, dictId, index, queue, settings.dailyNewTarget, t])
+  }, [current, dictId, index, queue, settings.dailyNewTarget, t, flushCards])
+
+  // 卸载/完成时把未写入的卡片落盘（防抖未触发也不丢）
+  useEffect(() => () => {
+    if (writeTimer.current) { clearTimeout(writeTimer.current); store.saveCards(cardsRef.current) }
+  }, [])
 
   const done = !loading && index >= queue.length
   const pool = useMemo(() => words, [words])
