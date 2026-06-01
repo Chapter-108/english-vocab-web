@@ -29,7 +29,7 @@ export function parseLexicon(word: string, data: unknown): WordDetails | null {
         partOfSpeech: m.partOfSpeech,
         definition: d.definition,
         example: typeof d.example === 'string' && d.example.trim() ? d.example : undefined,
-        synonyms,
+        synonyms: [...synonyms],
       })
     }
   }
@@ -43,14 +43,17 @@ const LS_PREFIX = 'evw.lex.'
 function readLS(key: string): WordDetails | null | undefined {
   try {
     const raw = localStorage.getItem(LS_PREFIX + key)
-    return raw == null ? undefined : (JSON.parse(raw) as WordDetails)
+    if (raw == null) return undefined
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed.word !== 'string' || !Array.isArray(parsed.meanings)) return undefined
+    return parsed as WordDetails
   } catch { return undefined }
 }
 
 /** 拉取词的用法详情：内存 + localStorage 双缓存；离线/失败/404 返回缓存或 null（不抛）。 */
 export async function fetchWordDetails(word: string): Promise<WordDetails | null> {
   const key = word.toLowerCase()
-  if (memCache.has(key)) return memCache.get(key)!
+  if (memCache.has(key)) return memCache.get(key) as WordDetails | null
   const cached = readLS(key)
   if (cached !== undefined) { memCache.set(key, cached); return cached }
   try {
@@ -64,3 +67,6 @@ export async function fetchWordDetails(word: string): Promise<WordDetails | null
     return null // 离线/网络错误：无缓存则 null
   }
 }
+
+/** 仅供测试：清空进程内缓存，保证用例隔离。 */
+export function _clearMemCache() { memCache.clear() }

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { parseLexicon, fetchWordDetails } from './lexicon'
+import { parseLexicon, fetchWordDetails, _clearMemCache } from './lexicon'
 
 const SAMPLE = [{
   word: 'abandon',
@@ -46,7 +46,7 @@ describe('parseLexicon', () => {
 })
 
 describe('fetchWordDetails', () => {
-  beforeEach(() => { localStorage.clear() })
+  beforeEach(() => { localStorage.clear(); _clearMemCache() })
   it('fetches, parses, caches; second call does not refetch', async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => SAMPLE })
     vi.stubGlobal('fetch', fetchMock)
@@ -55,7 +55,7 @@ describe('fetchWordDetails', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1)
     const d2 = await fetchWordDetails('abandon')
     expect(fetchMock).toHaveBeenCalledTimes(1) // 命中内存缓存
-    expect(d2).toEqual(d1)
+    expect(d2).toBe(d1)
     vi.unstubAllGlobals()
   })
   it('returns null and does not throw when offline', async () => {
