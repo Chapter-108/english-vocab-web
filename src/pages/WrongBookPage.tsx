@@ -38,8 +38,8 @@ export function WrongBookPage() {
           <Link to="/review-wrong" className="block text-center bg-blue-600 text-white rounded-full px-6 py-3 mb-4 transition-transform active:scale-95">
             重练错词（{rows.length}）
           </Link>
-          {rows.map((r, i) => (
-            <div key={i} className="bg-white rounded-xl p-4 mb-3 shadow-sm">
+          {rows.map((r) => (
+            <div key={`${r.dictName}-${r.word}`} className="bg-white rounded-xl p-4 mb-3 shadow-sm">
               <div className="flex justify-between items-baseline">
                 <span className="font-semibold text-lg">{r.word}</span>
                 <span className="text-xs text-red-400">错 {r.wrongCount} 次</span>
