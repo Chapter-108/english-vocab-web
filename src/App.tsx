@@ -4,6 +4,7 @@ import { DictionaryListPage } from './pages/DictionaryListPage'
 import { TodayPage } from './pages/TodayPage'
 import { StudySessionPage } from './pages/StudySessionPage'
 import { StatsPage } from './pages/StatsPage'
+import { WrongBookPage } from './pages/WrongBookPage'
 import { SettingsPage } from './pages/SettingsPage'
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/dict/:id" element={<TodayPage />} />
         <Route path="/study/:id" element={<StudySessionPage />} />
         <Route path="/stats" element={<StatsPage />} />
+        <Route path="/wrong" element={<WrongBookPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
       <TabBar />

@@ -1,12 +1,13 @@
 import { store } from '../services/storage'
 import { today } from '../logic/date'
+import { selectWrongWords } from '../logic/wrongBook'
 
 export function StatsPage() {
   const t = today()
   const streak = store.streak(t)
   const cards = store.loadCards()
   const learned = cards.filter(c => c.learned).length
-  const wrong = cards.filter(c => c.wrongCount > 0).length
+  const wrong = selectWrongWords(cards).length
   const todayRec = store.loadDaily().find(d => d.date === t)
   return (
     <div className="p-4 pb-20">
