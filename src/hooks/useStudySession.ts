@@ -14,9 +14,9 @@ export function useStudySession(dictId: string, settings: Settings) {
   const [queue, setQueue] = useState<SessionItem[]>([])
   const [index, setIndex] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [reviewing, setReviewing] = useState<{ word: Word; correct: boolean } | null>(null)
   const t = today()
 
-  // 卡片常驻内存：加载时读入一次，答题只改内存 + 防抖写盘（性能：不每词序列化整表）
   const cardsRef = useRef<WordCard[]>([])
   const writeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const flushCards = useCallback(() => {
@@ -56,13 +56,17 @@ export function useStudySession(dictId: string, settings: Settings) {
     flushCards()
 
     const remainingNew = queue.slice(index + 1).filter(i => i.isNew).length
-    const doneNew = (store.loadDaily().find(d => d.date === t)?.newWords ?? 0) + (current.isNew ? 1 : 0)
-    store.recordStudy(t, { isNew: current.isNew, goalReached: doneNew >= settings.dailyNewTarget && remainingNew === 0 })
+    const newTargetReached = (store.loadDaily().find(d => d.date === t)?.newWords ?? 0) + (current.isNew ? 1 : 0) >= settings.dailyNewTarget
+    store.recordStudy(t, { isNew: current.isNew, goalReached: newTargetReached && remainingNew === 0 })
 
-    setIndex(i => i + 1)
+    setReviewing({ word: current.word, correct })
   }, [current, dictId, index, queue, settings.dailyNewTarget, t, flushCards])
 
-  // 卸载/完成时把未写入的卡片落盘（防抖未触发也不丢）
+  const next = useCallback(() => {
+    setReviewing(null)
+    setIndex(i => i + 1)
+  }, [])
+
   useEffect(() => () => {
     if (writeTimer.current) { clearTimeout(writeTimer.current); store.saveCards(cardsRef.current) }
   }, [])
@@ -70,5 +74,5 @@ export function useStudySession(dictId: string, settings: Settings) {
   const done = !loading && index >= queue.length
   const pool = useMemo(() => words, [words])
 
-  return { loading, current, done, pool, progress: { index, total: queue.length }, submit }
+  return { loading, current, reviewing, done, pool, progress: { index, total: queue.length }, submit, next }
 }
