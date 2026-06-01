@@ -16,11 +16,14 @@
 - 三种模式（认词/听写/拼写）答完后不自动切词，弹出「结果面板」，对错都停留。
 - 结果面板：对错徽标、单词、🔊 重听、美/英音标、**全部**中文释义、在线用法区（词性/英文释义/例句/近义词）、「下一个」按钮（桌面 Enter/空格）。
 - 在线用法来自免费词典 API（dictionaryapi.dev），**内存 + localStorage 双缓存**，离线/失败时降级为仅本地释义。
+- **错词本**（详见 §9）：底部新增「错词」标签；列出当前错词（单词+释义+错次），可一键「重练错词」进入只含错词的学习；答对 1 次自动移出错词本。
 
 ### 不做（YAGNI）
-- 面板上的「加入错词本 / 收藏」按钮（错词强化属第二期）。
+- 面板上的「加入错词本」按钮——错词本**自动**收录答错的词，无需手动加。
+- 「收藏」功能。
 - 中文例句（dictionaryapi.dev 为英英，无中文例句）。
 - 真人发音音频播放（仍用现有 Web Speech TTS；API 返回的 audio 字段本期不接）。
+- 错词本"连对 N 次才移除"的可配置项（本期固定 N=1：答对 1 次即移出；阈值留作以后设置项）。
 
 ## 3. 交互流程
 
@@ -114,3 +117,43 @@ else           → 当前词的模式组件（onResult={submit}）
 
 - 更新《设计文档-iOS背单词App.md》§4（去掉"全对→自动切下一词"，改为"答完→停留面板→手动下一个")与 §5.1（补充结果面板）。
 - 数据模型不变（Word 仍只有 name/trans/usphone/ukphone；用法为运行时在线获取，不进词库文件，故**不影响词库准确性测试与校验和**）。
+
+## 9. 错词本（列表 + 重练）
+
+### 9.1 成员判定（派生，零 srs 改动）
+
+错词本成员**完全由现有 `WordCard` 字段派生**，不新增字段、不改 `srs.review`：
+
+```
+错词 = 卡片满足 wrongCount > 0 且 repetitions === 0
+```
+
+原理：SM-2 里答错 `repetitions` 归 0、`wrongCount++`（进本）；答对 `repetitions` 从 0 变 1（出本）。所以"答错进本、答对 1 次出本"天然成立。封装为纯函数 `selectWrongWords(cards)`，可单测。
+
+> "连对 N 次才移除"本期固定 N=1（`repetitions === 0` 即在本）。未来若做设置项，改为 `repetitions < N` 即可。
+
+### 9.2 错词本页（`WrongBookPage`，路由 `/wrong`）
+
+- 读 `store.loadCards()` → `selectWrongWords` → 按 `dictId` 分组，`loadDict` 拉相关词库取释义。
+- 列表项：单词 + 首条中文释义 + 所属词库 + 「错 N 次」。
+- 顶部「重练错词（N）」按钮 → 路由 `/review-wrong`；N=0 时按钮禁用，显示空状态「还没有错词 🎉」。
+- 跨词库统一展示（所有词库的错词汇总）。
+
+### 9.3 重练（`useWrongReview` hook + `WrongReviewPage`，路由 `/review-wrong`）
+
+- 加载一次：`selectWrongWords` → 分组 `loadDict` → 构造 `items: { word, dictId, pool, mode }[]`，`mode = forcedMode==='auto' ? pickMode(card) : forcedMode`，`pool` 为该词所属词库的词表（供认词干扰项）。
+- 复用与主学习相同的「判分→停留面板→下一个」流程：`submit(correct)` 更新卡片(SM-2) + `recordStudy(isNew:false, goalReached:false)` + 置 `reviewing`；`next()` 切词。答对 → `repetitions` 变 1 → 该词下次进错词本时已移出。
+- 复用 `ResultPanel`、三个模式组件。
+- 全部练完 → 「本轮错词已完成 🎉」+ 返回。
+
+### 9.4 入口与统计
+
+- `TabBar` 增加「错词」标签：词库 / 统计 / 错词 / 设置（4 个）。
+- `App` 增加路由 `/wrong`、`/review-wrong`。
+- `StatsPage` 的「错词数」改用 `selectWrongWords(cards).length`（与错词本口径一致，避免历史值与当前本数量不一致）。
+
+### 9.5 测试（错词本）
+
+- **单测**：`selectWrongWords`——答错进本、答对 1 次出本、再答错重新进本、wrongCount=0 不在本、跨 dictId 都纳入。
+- **e2e**：制造一个错词（拼写故意打错 → 答对完成 → 进入错词本可见）→ 「错词」标签显示该词 → 重练答对 → 该词移出。
+- 现有 srs/storage 单测不受影响（未改 `WordCard`/`review`）。
