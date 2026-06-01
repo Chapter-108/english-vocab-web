@@ -4212,14 +4212,7 @@
         "usphone": "ˈbrɔːdkɑːst",
         "ukphone": "'brɔːdkæst",
         "trans": [
-            "n. 广播节目"
-        ]
-    },
-    {
-        "name": "broadcast",
-        "usphone": "ˈbrɔːdkɑːst",
-        "ukphone": "'brɔːdkæst",
-        "trans": [
+            "n. 广播节目",
             "vt. 广播"
         ]
     },
@@ -8856,14 +8849,6 @@
         ]
     },
     {
-        "name": "doctor",
-        "usphone": "'dɑktɚ",
-        "ukphone": "'dɒktə",
-        "trans": [
-            "n. 医生，大夫；博士"
-        ]
-    },
-    {
         "name": "draft",
         "usphone": "drɑːft; (US) dræft",
         "ukphone": "dræft",
@@ -10340,7 +10325,8 @@
         "usphone": "ˈfiːmeɪl",
         "ukphone": "'fiːmeɪl",
         "trans": [
-            "n. 女(的)；雌(的)； 英尺"
+            "n. 女(的)；雌(的)； 英尺",
+            "a. 女的；女性的；雌性的"
         ]
     },
     {
@@ -10436,14 +10422,7 @@
         "usphone": "fɔːl",
         "ukphone": "fɔːl",
         "trans": [
-            "n. （美）秋季"
-        ]
-    },
-    {
-        "name": "fall",
-        "usphone": "fɔːl",
-        "ukphone": "fɔːl",
-        "trans": [
+            "n. （美）秋季",
             "(fell, fallen) vi. 落（下），降落；倒"
         ]
     },
@@ -10696,14 +10675,6 @@
         ]
     },
     {
-        "name": "female",
-        "usphone": "ˈfiːmeɪl",
-        "ukphone": "'fiːmeɪl",
-        "trans": [
-            "a. 女的；女性的；雌性的"
-        ]
-    },
-    {
         "name": "fence",
         "usphone": "fens",
         "ukphone": "fens",
@@ -10812,14 +10783,7 @@
         "usphone": "faɪt",
         "ukphone": "faɪt",
         "trans": [
-            "n. 打仗（架），争论"
-        ]
-    },
-    {
-        "name": "fight",
-        "usphone": "faɪt",
-        "ukphone": "faɪt",
-        "trans": [
+            "n. 打仗（架），争论",
             "(fought, fought) n. 打仗（架），与……打仗（架）"
         ]
     },
@@ -17884,7 +17848,8 @@
         "usphone": "ˈnʌmbə(r)",
         "ukphone": "'nʌmbə",
         "trans": [
-            "n.数字;号码"
+            "n.数字;号码",
+            "n. 数,数字,号码,数量"
         ]
     },
     {
@@ -18144,14 +18109,6 @@
         ]
     },
     {
-        "name": "number",
-        "usphone": "ˈnʌmbə(r)",
-        "ukphone": "'nʌmbə",
-        "trans": [
-            "n. 数,数字,号码,数量"
-        ]
-    },
-    {
         "name": "nurse",
         "usphone": "nɜːs",
         "ukphone": "nɜːs",
@@ -18301,14 +18258,6 @@
         "ukphone": "ɒf",
         "trans": [
             "prep. 离开,脱离,（走）开"
-        ]
-    },
-    {
-        "name": "ad",
-        "usphone": "æd",
-        "ukphone": "æd",
-        "trans": [
-            ".离开；（电自来水）停了,中断"
         ]
     },
     {
@@ -18628,14 +18577,7 @@
         "usphone": "ˈɔːdə(r)",
         "ukphone": "'ɔːdə",
         "trans": [
-            "n. 顺序"
-        ]
-    },
-    {
-        "name": "order",
-        "usphone": "ˈɔːdə(r)",
-        "ukphone": "'ɔːdə",
-        "trans": [
+            "n. 顺序",
             "vt. 定购，定货；点菜"
         ]
     },
@@ -19188,14 +19130,7 @@
         "usphone": "ˈpærɪs",
         "ukphone": "pɑːk",
         "trans": [
-            "n. 公园"
-        ]
-    },
-    {
-        "name": "park",
-        "usphone": "pɑːk",
-        "ukphone": "pɑːk",
-        "trans": [
+            "n. 公园",
             "vt. 停放（汽车）"
         ]
     },
@@ -21836,7 +21771,8 @@
         "usphone": "ˈrekɔːd; (US) ˈrekərd",
         "ukphone": "(for v.)rɪˈkɔːd; (for n.) ˈrekɔːd",
         "trans": [
-            "n. 记录；唱片"
+            "n. 记录；唱片",
+            "v. 录制，记录"
         ]
     },
     {
@@ -21845,14 +21781,6 @@
         "ukphone": "",
         "trans": [
             "记录保持者"
-        ]
-    },
-    {
-        "name": "record",
-        "usphone": "ˈrekɔːd; (US) ˈrekərd",
-        "ukphone": "(for v.)rɪˈkɔːd; (for n.) ˈrekɔːd",
-        "trans": [
-            "v. 录制，记录"
         ]
     },
     {
@@ -24084,14 +24012,7 @@
         "usphone": "ʃaɪn",
         "ukphone": "ʃaɪn",
         "trans": [
-            "n. 光泽；光彩；阳光；晴天；光(亮)"
-        ]
-    },
-    {
-        "name": "shine",
-        "usphone": "ʃaɪn",
-        "ukphone": "ʃaɪn",
-        "trans": [
+            "n. 光泽；光彩；阳光；晴天；光(亮)",
             "v. 发光；照耀；杰出；擦亮"
         ]
     },
@@ -24132,7 +24053,8 @@
         "usphone": "ʃuːt",
         "ukphone": "ʃuːt",
         "trans": [
-            "(shot, shot) vt. 射击，射中，发射 n. 嫩枝；苗；芽"
+            "(shot, shot) vt. 射击，射中，发射 n. 嫩枝；苗；芽",
+            "n. 射击，开枪，开炮，射击声；子弹"
         ]
     },
     {
@@ -24221,14 +24143,6 @@
         "ukphone": "'ʃɔːt'weɪv",
         "trans": [
             "n. 短波"
-        ]
-    },
-    {
-        "name": "shoot",
-        "usphone": "ʃɔt",
-        "ukphone": "ʃuːt",
-        "trans": [
-            "n. 射击，开枪，开炮，射击声；子弹"
         ]
     },
     {
@@ -26156,14 +26070,7 @@
         "usphone": "straɪk",
         "ukphone": "straɪk",
         "trans": [
-            "v.（钟）鸣;敲（响）,罢工"
-        ]
-    },
-    {
-        "name": "strike",
-        "usphone": "straɪk",
-        "ukphone": "straɪk",
-        "trans": [
+            "v.（钟）鸣;敲（响）,罢工",
             "vt. 擦（打）火, 侵袭"
         ]
     },
@@ -27876,7 +27783,8 @@
         "usphone": "ˈtaɪə(r)",
         "ukphone": "taɪə",
         "trans": [
-            "vi. 使疲劳"
+            "vi. 使疲劳",
+            "n. 轮胎【美】"
         ]
     },
     {
@@ -28741,14 +28649,6 @@
         "ukphone": "'taɪə",
         "trans": [
             "n. 轮胎【英】"
-        ]
-    },
-    {
-        "name": "tire",
-        "usphone": "ˈtaɪər",
-        "ukphone": "taɪə",
-        "trans": [
-            "n. 轮胎【美】"
         ]
     },
     {
@@ -29880,14 +29780,6 @@
         ]
     },
     {
-        "name": "war",
-        "usphone": "wɔː(r)",
-        "ukphone": "wɔː",
-        "trans": [
-            "n vt. 警告，预先通知"
-        ]
-    },
-    {
         "name": "warning",
         "usphone": "ˈwɔːnɪŋ",
         "ukphone": "'wɔːnɪŋ",
@@ -30428,14 +30320,7 @@
         "usphone": "wɪl",
         "ukphone": "wɪl",
         "trans": [
-            "n. 意志, 遗嘱"
-        ]
-    },
-    {
-        "name": "will",
-        "usphone": "wɪl",
-        "ukphone": "wɪl",
-        "trans": [
+            "n. 意志, 遗嘱",
             "modal v. 将,会(表示将来)；愿意，要"
         ]
     },
