@@ -12,7 +12,7 @@ export function ChoiceMode({ word, pool, settings, onResult }: {
   function choose(i: number) {
     if (picked !== null) return
     setPicked(i)
-    setTimeout(() => onResult(i === correctIndex), 800)
+    setTimeout(() => { setPicked(null); onResult(i === correctIndex) }, 800)
   }
 
   return (
